@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order</title>
+
+
+    <!-- CSS only -->
+<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <style>
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-inline .form-control {
+            display: inline-block;
+            width: auto;
+            vertical-align: middle;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-right: -5px;
+            margin-left: -5px;
+        }
+
+        label {
+            margin-bottom: 0.5rem;
+        }
+        .btn-link {
+            border: none;
+            outline: none;
+            background: none;
+            cursor: pointer;
+            color: #0000EE;
+            padding: 0;
+            text-decoration: underline;
+            font-family: inherit;
+            font-size: inherit;
+        }
+    </style>
+
+</head>
+<body>
+<header>
+    <div class="col-md-12" >
+        <ul class="nav nav-pills" style="margin-left: 10px; margin-top: 10px; float: left ;">
+
+            <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout</a>
+            </li>
+
+
+
+        </ul>
+        <svg  xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor"  class="bi bi-person-circle justify-content-end" viewBox="0 0 16 16" style="margin-right: 10px; margin-top: 10px; float: right ;">
+
+            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+
+        </svg>
+        <h6 style="float: right;margin-top: 15px; margin-right: 5px;" th:text="'user: ' + ${user.getFullName()}"></h6>
+        <h6 style="float: right;margin-top: 15px; margin-right: 5px;" th:text="'org: ' + ${org.getName()} + ' | '"></h6>
+    </div>
+
+</header>
+<div class="row py-lg-5" style="margin-left: 480px;">
+</div>
+
+
+
+<div class="container">
+    <h4>Register Form</h4>
+    <br>
+    <form class="form-inline" method="post" action="/admin/register">
+        <label for="fullName">Full name:</label>
+        <input type="text" class="form-control" id="fullName" placeholder="Enter Full Name" name="fullName">
+        <label for="phone">Phone Number:</label>
+        <input type="text" class="form-control" id="phone" placeholder="Enter phone Number" name="phone">
+
+        <label for="photo">Photo link:</label>
+        <input type="text" class="form-control" id="photo" placeholder="Enter photo link" name="photo">
+        <br>
+        <br>
+        <br>
+        <label for="login">Login:</label>
+        <input type="text" class="form-control" id="login" placeholder="Enter login" name="login">
+        <label for="pwd">Password:</label>
+        <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="password">
+        <select id="roles" name="role">
+            <option value="ROLE_PHARMACIST">pharmacist</option>
+            <option value="ROLE_DELIVERYMAN">deliveryman</option>
+            <option value="ROLE_ADMIN">admin</option>
+        </select>
+
+
+
+        <button  type="submit" class="btn btn-secondary">Register</button>
+    </form>
+
+
+</div>
+
+
+
+
+<h2>users</h2>
+<div class="table-responsive">
+    <table class="table table-striped table-sm">
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>full name</th>
+            <th>role</th>
+
+            <th>start working</th>
+            <th>end working</th>
+            <th>phone number</th>
+
+            <th>photo</th>
+            <th>edit</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="u : ${users}">
+            <td th:text="${u.getId()}"></td>
+            <td th:text="${u.getFull_name()}"></td>
+            <td th:text="${u.getRole()}"></td>
+
+            <td th:text="${u.getStart_date()}"></td>
+            <td th:text="${u.getEnd_date()}"></td>
+            <td th:text="${u.getPhone()}"></td>
+
+            <td th:text="${u.getPhoto()}"></td>
+            <td >
+            <form th:action="'/admin/delete/' + ${u.getId()}" method="post">
+                <button type="submit" name="your_name" value="your_value" class="btn-link">fire</button>
+            </form></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+</html>
