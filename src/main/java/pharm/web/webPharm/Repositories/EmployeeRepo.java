@@ -29,6 +29,6 @@ public interface EmployeeRepo extends CrudRepository<EmployeeEntity, Integer> {
     void inserUser(String login, String fullName, String photo, int phone, Date start_date,  int org_id);
 
     @Modifying
-    @Query(value="DELETE FROM `employee` WHERE `user_name` = ?", nativeQuery = true)
+    @Query(value="UPDATE `employee` as e SET e.end_date = CURDATE(), e.photo = '#', e.user_name = null WHERE e.user_name = ?", nativeQuery = true)
     void delete(String login);
 }

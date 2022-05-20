@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
+import pharm.web.webPharm.DTO.EarningDTO;
 import pharm.web.webPharm.Models.DeliveredEntity;
 
 import java.sql.Date;
@@ -26,4 +27,17 @@ public interface DeliveredRepo extends CrudRepository<DeliveredEntity, Integer> 
 
     @Query(value="SELECT * FROM `delivered` WHERE `delivered`.`deliveryman_id` = ?1", nativeQuery = true)
     List<DeliveredEntity> getDelivered(int id);
+
+    @Query(value="SELECT sum(m.price*d.quantity) as cash, DATE_FORMAT(d.delivered_date,'%m-%Y') as 'date' FROM `delivered` as d JOIN `medicine` as m on m.id = d.medicine_id GROUP by year(d.delivered_date), month(d.delivered_date)", nativeQuery = true)
+    List<EarningDTO> getEarningForEveryMonth();
+
+    @Query(value="SELECT sum(m.price*d.quantity) as cash, DATE_FORMAT(d.delivered_date,'%Y') as 'date' FROM `delivered` as d JOIN `medicine` as m on m.id = d.medicine_id", nativeQuery = true)
+    int getEarningForAllTime();
+
+    @Query(value="SELECT sum(m.price*d.quantity) as cash, DATE_FORMAT(d.delivered_date,'%Y') as 'date' FROM `delivered` as d JOIN `medicine` as m on m.id = d.medicine_id GROUP by year(d.delivered_date)", nativeQuery = true)
+    List<EarningDTO> getEarningForEveryYear();
+
+    @Query(value="SELECT sum(m.price*d.quantity) as cash, DATE_FORMAT(d.delivered_date,'%Y') as 'date' FROM `delivered` as d JOIN `medicine` as m on m.id = d.medicine_id where year(d.delivered_date) = ? GROUP by year(d.delivered_date)", nativeQuery = true)
+    List<EarningDTO> getEarningPerYear(int year);
+
 }

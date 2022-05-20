@@ -21,7 +21,7 @@
     </nav>
     <ul class="nav nav-pills" style="margin-left: 10px; margin-top: 10px; float: left ;">
         <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/deliveryman">Main</a>
+            <a class="nav-link active" aria-current="page" href="/pharmacist">Main</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="/logout">Logout</a>
@@ -48,30 +48,38 @@
     </nav>
 </div>
 <div class="container">
-            <h2>Delivered</h2>
-            <div class="table-responsive">
-                <table class="table table-striped table-sm">
-                    <thead>
-                    <tr>
-                        <th>id</th>
-                        <th>Medicine id</th>
-                        <th>Deliveryman id</th>
-                        <th>quantity</th>
-                        <th>delivered date</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-
-                    <tr th:each="deliv : ${delivs}">
-                        <td th:text="${deliv.getId()}"></td>
-                        <td th:text="${deliv.getMedicineId()}"></td>
-                        <td th:text="${deliv.getDeliverymanId()}"></td>
-                        <td th:text="${deliv.getQuantity()}"></td>
-                        <td th:text="${deliv.getDeliveredDate()}"></td>
-                    </tr>
-                    </tbody>
-                </table>
+    <h2>Delivered</h2>
+    <div style="float: right">
+        <form action="/pharmacist/perYear" method="post">
+            <label style="margin-left: 20px" for="lastName">Year</label>
+            <input type="text" class="form-control" id="lastName" name="year" value="" required="">
+            <div class="invalid-feedback">
+                Valid quantity is required.
             </div>
+
+            <button style="margin-left: 20px" class="btn btn-lg btn-primary btn-block" type="submit">Get</button>
+
+        </form>
+
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped table-sm">
+            <thead>
+            <tr>
+                <th>Cash</th>
+                <th>Date</th>
+
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr th:each="c : ${cash}">
+                <td th:text="${c.getCash()}"></td>
+                <td th:text="${c.getDate()}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 

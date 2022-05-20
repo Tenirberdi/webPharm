@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pharm.web.webPharm.DTO.MedicineInfoDTO;
 import pharm.web.webPharm.Exceptions.QuantityError;
 import pharm.web.webPharm.Models.MedicineEntity;
 import pharm.web.webPharm.Models.OrderMedicineEntity;
@@ -23,6 +25,8 @@ public class PharmController {
 
     @GetMapping("")
     public String getStart(Model model){
+
+        pharmService.test1();
 
         model.addAttribute("org", pharmService.getOrganization());
         model.addAttribute("user", pharmService.getCurrentUser());
@@ -50,15 +54,25 @@ public class PharmController {
         return "pharm";
     }
 
-    @PostMapping("/single/{medicine_id}")
-    public String getSingle(@PathVariable("medicine_id") int id,Model model){
+    @GetMapping("/single/{medicine_id}")
+    public String getSingle(@PathVariable("medicine_id") int id, Model model, RedirectAttributes redirectAttributes){
 
-        MedicineEntity medicine = pharmService.getSingleMedicine(id);
-        model.addAttribute("medicine", medicine);
-        model.addAttribute("user", pharmService.getCurrentUser());
-        model.addAttribute("org", pharmService.getOrganization());
+        try {
+            MedicineEntity medicine = pharmService.getSingleMedicine(id);
+            if(medicine == null){
+                throw new Exception();
+            }
+            model.addAttribute("medicine", medicine);
+            model.addAttribute("user", pharmService.getCurrentUser());
+            model.addAttribute("org", pharmService.getOrganization());
 
-        return "single";
+            return "single";
+        }catch(Exception e){
+            redirectAttributes.addFlashAttribute("error", "Such Medicine Not Found In This Organization");
+            redirectAttributes.addFlashAttribute("path", "/pharmacist");
+            redirectAttributes.addFlashAttribute("status", "500");
+            return "redirect:/error";
+        }
     }
 
     @GetMapping("/order")
@@ -97,4 +111,93 @@ public class PharmController {
         pharmService.sellMedicine(sold);
         return "redirect:/pharmacist/sell";
     }
+
+    @GetMapping("/edit/{medId}")
+    public String editMedicine(@PathVariable int medId, Model model){
+        MedicineEntity med = pharmService.getMedicine(medId);
+
+        model.addAttribute("org", pharmService.getOrganization());
+        model.addAttribute("user", pharmService.getCurrentUser());
+        model.addAttribute("medicine", med);
+
+        return "edit";
+    }
+
+    @PostMapping("/editPost")
+    public String editMedicinePost(@ModelAttribute MedicineInfoDTO medInfo){
+
+        pharmService.editMedicine(medInfo);
+
+
+        return "redirect:/pharmacist/single/" + medInfo.getId();
+    }
+
+    @GetMapping("/delete/{medId}")
+    public String deleteMedicine(@PathVariable int medId){
+        pharmService.deleteMedicine(medId);
+        return "redirect:/pharmacist";
+    }
+
+    @GetMapping("/earning")
+    public String getEarning(Model model){
+        model.addAttribute("org", pharmService.getOrganization());
+        model.addAttribute("user", pharmService.getCurrentUser());
+
+        if(model.asMap().get("result") == null) {
+            model.addAttribute("cash", pharmService.getEarningPerMonth());
+        }else{
+            model.addAttribute("cash", model.asMap().get("result"));
+        }
+        return "earningP";
+    }
+
+    @PostMapping("/perYear")
+    public String getPerYear(@RequestParam int year, RedirectAttributes redirectAttributes){
+        redirectAttributes.addFlashAttribute("result", pharmService.getEarningPerYear(year));
+        return "redirect:/pharmacist/earning";
+    }
+
+    @GetMapping("/topSellers")
+    public String getTopSeller(Model model){
+        model.addAttribute("org", pharmService.getOrganization());
+        model.addAttribute("user", pharmService.getCurrentUser());
+        model.addAttribute("postPath", "/pharmacist/topSellersPerYear");
+        model.addAttribute("pageInfo", "statistics of top Sellers");
+
+        if(model.asMap().get("result") == null) {
+            model.addAttribute("data", pharmService.getTopSellerPerMonth());
+        }else{
+            model.addAttribute("data", model.asMap().get("result"));
+        }
+        return "statistics";
+    }
+
+    @PostMapping("/topSellersPerYear")
+    public String getTopSellerPerYear(@RequestParam int year, RedirectAttributes redirectAttributes){
+        redirectAttributes.addFlashAttribute("result", pharmService.getTopSellerPerYear(year));
+        return "redirect:/pharmacist/topSellers";
+    }
+
+    @GetMapping("/topMedicines")
+    public String getTopMedicines(Model model){
+        model.addAttribute("org", pharmService.getOrganization());
+        model.addAttribute("user", pharmService.getCurrentUser());
+        model.addAttribute("postPath", "/pharmacist/topMedicinesPerYear");
+        model.addAttribute("pageInfo", "statistics of top Medicines");
+
+        if(model.asMap().get("result") == null) {
+            model.addAttribute("data", pharmService.getTopMedicinesPerMonth());
+        }else{
+            model.addAttribute("data", model.asMap().get("result"));
+        }
+        return "statistics";
+    }
+
+    @PostMapping("/topMedicinesPerYear")
+    public String getMedicinesPerYear(@RequestParam int year, RedirectAttributes redirectAttributes){
+        redirectAttributes.addFlashAttribute("result", pharmService.getTopMedicinesPerYear(year));
+        return "redirect:/pharmacist/topMedicines";
+    }
+
+
 }

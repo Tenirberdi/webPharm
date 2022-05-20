@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pharm.web.webPharm.Exceptions.QuantityError;
 import pharm.web.webPharm.Services.DelivService;
 import pharm.web.webPharm.Services.PharmService;
@@ -47,6 +48,26 @@ public class DelivController {
         model.addAttribute("delivs", delivService.getDelivered());
         return "delivered";
     }
+
+    @GetMapping("/earning")
+    public String getEarning(Model model){
+        model.addAttribute("org", pharmService.getOrganization());
+        model.addAttribute("user", pharmService.getCurrentUser());
+
+        if(model.asMap().get("result") == null) {
+            model.addAttribute("cash", delivService.getEarningForEveryMonth());
+        }else{
+            model.addAttribute("cash", model.asMap().get("result"));
+        }
+        return "earning";
+    }
+
+    @PostMapping("/perYear")
+    public String getPerYear(@RequestParam int year, RedirectAttributes redirectAttributes){
+        redirectAttributes.addFlashAttribute("result", delivService.getEarningPerYear(year));
+        return "redirect:/deliveryman/earning";
+    }
+
 
 
 }

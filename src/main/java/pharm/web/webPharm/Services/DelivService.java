@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import pharm.web.webPharm.DTO.EarningDTO;
+import pharm.web.webPharm.DTO.EarningPharmacistDTO;
 import pharm.web.webPharm.Exceptions.QuantityError;
 import pharm.web.webPharm.Models.DeliveredEntity;
 import pharm.web.webPharm.Models.EmployeeEntity;
@@ -99,6 +101,16 @@ public class DelivService {
         EmployeeEntity user  = employeeRepo.findById(getCurrentUsersUserID()).get();
         return user;
     }
+
+    public List<EarningDTO> getEarningForEveryMonth(){
+        return deliveredRepo.getEarningForEveryMonth();
+    }
+
+    public List<EarningDTO> getEarningPerYear(int year){
+        return deliveredRepo.getEarningPerYear(year);
+    }
+
+
 
 
 }

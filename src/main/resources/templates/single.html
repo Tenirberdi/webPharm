@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,14 +16,11 @@
       <a class="nav-link active" aria-current="page" href="/pharmacist">Main</a>
     </li>
   </ul>
-  <svg  xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor"  class="bi bi-person-circle justify-content-end" viewBox="0 0 16 16" style="margin-right: 10px; margin-top: 10px; float: right ;">
-  
-    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-    <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
-   
-  </svg>
+    <img th:src="@{${user.getPhoto}}" alt="" width="35px" height="35px" style="float: right;border-radius: 50%; margin-right: 10px">
+
     <h6 style="float: right;margin-top: 15px; margin-right: 5px;" th:text="'user: ' + ${user.getFullName()}"></h6>
     <h6 style="float: right;margin-top: 15px; margin-right: 5px;" th:text="'org: ' + ${org.getName()} + ' | '"></h6>
+
 </div>
  
 </header>
@@ -36,13 +33,14 @@
       <div class="row py-lg-">
         <div class="col-lg-12 col-md-8 mx-auto">
             <img style="width:300px; height:225px; object-fit: cover" th:src="@{${medicine.getPhoto()}}"  alt=""/>
-          <p class="lead text-muted" th:text="${medicine.getName()}"></p>
-          <p class="lead text-muted" th:text="${medicine.getPrice()}"></p>
-          <p class="lead text-muted" th:text="${medicine.getQuantity()}"></p>
-          <p class="lead text-muted" th:text="${medicine.getManufacturer()}"></p>
-          <p class="lead text-muted" th:text="${medicine.getSale()}"></p>
-            <a href="#" class="btn btn-primary my-2">Delete</a>
-            <a href="#" class="btn btn-secondary my-2">Edit</a>
+            <p class="lead text-muted" th:text="'ID: ' + ${medicine.getId()}"></p>
+          <p class="lead text-muted" th:text="'NAME: ' + ${medicine.getName()}"></p>
+          <p class="lead text-muted" th:text="'PRICE: ' + ${medicine.getPrice()}"></p>
+          <p class="lead text-muted" th:text="'QUANTITY: ' + ${medicine.getQuantity()}"></p>
+          <p class="lead text-muted" th:text="'MANUFACTURER: ' + ${medicine.getManufacturer()}"></p>
+          <p class="lead text-muted" th:text="'SALE: ' + ${medicine.getSale()}"></p>
+            <a th:href="@{'/pharmacist/delete/' + ${medicine.getId()}}" class="btn btn-primary my-2">Delete</a>
+            <a th:href="@{'/pharmacist/edit/' + ${medicine.getId()}}" class="btn btn-secondary my-2">Edit</a>
           </p>
         </div>
       </div>

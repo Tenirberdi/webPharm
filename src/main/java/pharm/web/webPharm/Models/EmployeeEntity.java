@@ -1,6 +1,7 @@
 package pharm.web.webPharm.Models;
 
 import javax.persistence.*;
+import javax.xml.crypto.Data;
 import java.sql.Date;
 import java.util.Objects;
 
@@ -14,6 +15,7 @@ public class EmployeeEntity {
     private Integer phone;
     private Date startDate;
     private int organizationId;
+    private Date end_date;
 
     @Id
     @Column(name = "id")
@@ -80,10 +82,14 @@ public class EmployeeEntity {
     public int getOrganizationId() {
         return organizationId;
     }
-
     public void setOrganizationId(int organizationId) {
         this.organizationId = organizationId;
     }
+
+    @Basic
+    @Column(name="end_date")
+    public Date getEnd_date(){return end_date;}
+    public void setEnd_date(Date end_date){this.end_date = end_date;}
 
     @Override
     public boolean equals(Object o) {

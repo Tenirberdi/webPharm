@@ -44,6 +44,13 @@ public class AdminService {
 
     }
 
+    public void delete(int id){
+        String login = employeeRepo.findById(id).get().getUserName();
+        employeeRepo.delete(login);
+        roleRepo.delete(login);
+        usrRepo.delete(login);
+    }
+
     //************************************************************************************************
     public Date getCurrentDate() throws ParseException {
         long millis=System.currentTimeMillis();
@@ -83,11 +90,6 @@ public class AdminService {
         return user;
     }
 
-    public void delete(int id){
-        String login = employeeRepo.findById(id).get().getUserName();
-        employeeRepo.delete(login);
-        roleRepo.delete(login);
-        usrRepo.delete(login);
-    }
+
 
 }
