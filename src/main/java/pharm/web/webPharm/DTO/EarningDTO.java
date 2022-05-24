@@ -5,5 +5,5 @@ public interface EarningDTO {
     String getDate();
 
 
-    //something 
+    //something
 }
