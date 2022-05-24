@@ -26,8 +26,6 @@ public class PharmController {
     @GetMapping("")
     public String getStart(Model model){
 
-        pharmService.test1();
-
         model.addAttribute("org", pharmService.getOrganization());
         model.addAttribute("user", pharmService.getCurrentUser());
         model.addAttribute("medicines", pharmService.getAllMedicines());
@@ -98,7 +96,7 @@ public class PharmController {
     public String getSell(Model model){
         model.addAttribute("org", pharmService.getOrganization());
         model.addAttribute("user", pharmService.getCurrentUser());
-        model.addAttribute("sold", pharmService.getSoldMedicines());
+        model.addAttribute("sold", pharmService.getSoldMedicines(0));
 
         return "sell";
     }

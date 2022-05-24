@@ -1,6 +1,6 @@
 package pharm.web.webPharm.DTO;
 
 public interface EarningDTO {
-    int getCash();
+    long getCash();
     String getDate();
 }

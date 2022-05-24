@@ -1,8 +1,8 @@
 package pharm.web.webPharm.DTO;
 
 public interface EarningPharmacistDTO {
-    int getId();
+    long getId();
     String getName();
-    int getQuantity();
+    long getQuantity();
     String getDate();
 }

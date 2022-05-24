@@ -13,8 +13,10 @@ import java.util.List;
 
 public interface SoldRepo extends CrudRepository<SoldEntity, Integer> {
 
-    @Query(value="SELECT * FROM `sold` as s JOIN `medicine` as m on s.medicine_id = m.id WHERE m.organization_id = ? ", nativeQuery = true)
-    List<SoldEntity> getAll(int org_id);
+    @Query(value="SELECT * FROM `sold` as s JOIN `medicine` as m on s.medicine_id = m.id WHERE m.organization_id = ? limit ?, 20", nativeQuery = true)
+    List<SoldEntity> getAll(int org_id, int limit);
+
+
 
     @Query(value="SELECT sum(s.quantity*m.price) as cash, DATE_FORMAT(s.sold_date, '%m-%Y') as 'date' FROM `sold` as s JOIN `medicine` as m on m.id = s.medicine_id GROUP BY year(s.sold_date), month(s.sold_date);", nativeQuery = true)
     List<EarningDTO> getEarningPerMonth();
@@ -33,6 +35,8 @@ public interface SoldRepo extends CrudRepository<SoldEntity, Integer> {
 
     @Query(value="SELECT s.pharmacist_id as id, e.full_name as name ,sum(s.quantity) as quantity , DATE_FORMAT(s.sold_date, '%m-%Y') as 'date' FROM `sold` as s JOIN employee as e on e.id = s.pharmacist_id where year(s.sold_date) = ? GROUP BY s.pharmacist_id, year(s.sold_date), month(s.sold_date) order by year(s.sold_date), month(s.sold_date), quantity desc", nativeQuery = true)
     List<EarningPharmacistDTO> getTopSellersPerYear(int year);
+
+
 
     @Modifying
     @Query(value="ALTER TABLE sold DISABLE KEYS" , nativeQuery = true)

@@ -115,8 +115,8 @@ public class PharmService {
         return result;
     }
 
-    public List<SoldEntity> getSoldMedicines(){
-        return soldRepo.getAll(getOrganizationId());
+    public List<SoldEntity> getSoldMedicines(int limit){
+        return soldRepo.getAll(getOrganizationId(), limit);
     }
 
     public List<EarningPharmacistDTO> getTopMedicinesPerMonth(){
@@ -142,49 +142,6 @@ public class PharmService {
     public List<EarningDTO> getEarningPerYear(int year){
         return soldRepo.getEarningPerYear(year);
     }
-
-
-
-
-
-
-
-    @Transactional
-    public void test1(){
-        Random r = new Random();
-        int[] medIds = {1,2,3,4};
-        int[] pharmIds = {5,9,10,11};
-        Date[] dates = {Date.valueOf("2022-05-01"), Date.valueOf("2021-05-01"), Date.valueOf("2021-06-01"), Date.valueOf("2021-01-01")};
-
-        //INSERT INTO `sold`( `medicine_id`, `pharmacist_id`, `quantity`, `sold_date`) VALUES ('1,2,3,4', '5,9,10,11', '10-50', '2022-05-01 - 2021-05-01 - 2020-05-01')
-
-        SoldEntity sold = new SoldEntity();
-
-        soldRepo.disableKeys();
-
-        for (int i = 100; i < 1000001; i++){
-            sold = new SoldEntity();
-
-            sold.setId(i);
-            sold.setMedicineId(medIds[r.nextInt(medIds.length)]);
-            sold.setPharmacistId(pharmIds[r.nextInt(pharmIds.length)]);
-            sold.setQuantity(r.nextInt(50-10) + 10);
-            sold.setSoldDate((Date) dates[r.nextInt(dates.length)]);
-
-            soldRepo.save(sold);
-        }
-
-        soldRepo.enableKeys();
-
-    }
-
-
-
-
-
-
-
-
 
 //************************************************************************************************
     public Date getCurrentDate() throws ParseException {
